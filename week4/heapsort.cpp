@@ -13,12 +13,12 @@ void sink(int a[], int k, int n) {
     while (2 * k <= n) {
         int j = 2 * k;
 
-        // Chọn con lớn hơn
+       
         if (j < n && a[j] < a[j + 1]) {
             j++;
         }
 
-        // Nếu cha lớn hơn hoặc bằng con thì dừng
+       
         if (a[k] >= a[j]) {
             break;
         }
@@ -29,12 +29,12 @@ void sink(int a[], int k, int n) {
 }
 
 void heapSort(int a[], int n) {
-    // Bước 1: Xây dựng Max Heap bằng sink
+   
     for (int k = n / 2; k >= 1; k--) {
         sink(a, k, n);
     }
 
-    // Bước 2: Đưa phần tử lớn nhất về cuối
+   
     while (n > 1) {
         swap(a[1], a[n]);
         n--;
