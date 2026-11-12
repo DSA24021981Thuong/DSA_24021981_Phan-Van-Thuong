@@ -1,58 +1,57 @@
 #include <iostream>
+#include <algorithm>
 using namespace std;
 
-void heapify(int a[], int n, int i) {
-    int largest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
+void swim(int a[], int k) {
+    while (k > 1 && a[k / 2] < a[k]) {
+        swap(a[k / 2], a[k]);
+        k = k / 2;
+    }
+}
 
-    if (left < n && a[left] > a[largest])
-        largest = left;
-    if (right < n && a[right] > a[largest])
-        largest = right;
+void sink(int a[], int k, int n) {
+    while (2 * k <= n) {
+        int j = 2 * k;
 
-    if (largest != i) {
-        int temp = a[i];
-        a[i] = a[largest];
-        a[largest] = temp;
-        heapify(a, n, largest);
+        // Chọn con lớn hơn
+        if (j < n && a[j] < a[j + 1]) {
+            j++;
+        }
+
+        // Nếu cha lớn hơn hoặc bằng con thì dừng
+        if (a[k] >= a[j]) {
+            break;
+        }
+
+        swap(a[k], a[j]);
+        k = j;
     }
 }
 
 void heapSort(int a[], int n) {
+    // Bước 1: Xây dựng Max Heap bằng sink
+    for (int k = n / 2; k >= 1; k--) {
+        sink(a, k, n);
+    }
 
-    for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(a, n, i);
- 
-    for (int end = n - 1; end > 0; end--) {
-        int temp = a[0];
-        a[0] = a[end];
-        a[end] = temp;
-
-        heapify(a, end, 0);
+    // Bước 2: Đưa phần tử lớn nhất về cuối
+    while (n > 1) {
+        swap(a[1], a[n]);
+        n--;
+        sink(a, 1, n);
     }
 }
 
 int main() {
-    int n;
-    cout << "Nhap so phan tu: ";
-    cin >> n;
-
-    if (n <= 0) {
-        cout << "So phan tu phai lon hon 0.\n";
-        return 1;
-    }
-
-    int *a = new int[n];
-    cout << "Nhap " << n << " so nguyen: ";
-    for (int i = 0; i < n; i++) cin >> a[i];
+    int a[] = {0, 5, 3, 8, 4, 1, 9, 2};
+    int n = 7;
 
     heapSort(a, n);
 
-    cout << "Day sau khi Heap Sort tang dan: ";
-    for (int i = 0; i < n; i++) cout << a[i] << " ";
-    cout << "\n";
+    cout << "Mang sau khi sap xep: ";
+    for (int i = 1; i <= n; i++) {
+        cout << a[i] << " ";
+    }
 
-    delete[] a;
     return 0;
 }
